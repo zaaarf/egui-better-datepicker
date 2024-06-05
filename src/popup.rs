@@ -54,8 +54,8 @@ impl<'a> DatePickerPopup<'a> {
 
 		let weeks = month_data(popup_state.year, popup_state.month);
 		let (mut close, mut saved) = (false, false);
-		let height = 20.0;
-		let spacing = 2.0;
+		let height = ui.style().text_styles[&egui::TextStyle::Button].size;
+		let spacing = (height + ui.spacing().button_padding.y * 2.0) / 10.0;
 		ui.spacing_mut().item_spacing = Vec2::splat(spacing);
 		StripBuilder::new(ui)
 			.clip(false)
@@ -258,7 +258,7 @@ impl<'a> DatePickerPopup<'a> {
 
 				if self.calendar {
 					strip.cell(|ui| {
-						ui.spacing_mut().item_spacing = Vec2::new(1.0, 2.0);
+						ui.spacing_mut().item_spacing = Vec2::new(spacing / 2.0, spacing);
 						TableBuilder::new(ui)
 							.vscroll(false)
 							.columns(Column::remainder(), if self.calendar_week { 8 } else { 7 })

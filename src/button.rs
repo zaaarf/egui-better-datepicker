@@ -8,7 +8,7 @@ pub(crate) struct DatePickerButtonState {
 }
 
 /// Shows a date, and will open a date picker popup when clicked.
-pub struct DatePickerButton<'a> {
+pub struct BetterDatePickerButton<'a> {
 	selection: &'a mut NaiveDate,
 	id_source: Option<&'a str>,
 	combo_boxes: bool,
@@ -20,7 +20,7 @@ pub struct DatePickerButton<'a> {
 	highlight_weekends: bool,
 }
 
-impl<'a> DatePickerButton<'a> {
+impl<'a> BetterDatePickerButton<'a> {
 	pub fn new(selection: &'a mut NaiveDate) -> Self {
 		Self {
 			selection,
@@ -94,7 +94,7 @@ impl<'a> DatePickerButton<'a> {
 	}
 }
 
-impl<'a> Widget for DatePickerButton<'a> {
+impl<'a> Widget for BetterDatePickerButton<'a> {
 	fn ui(self, ui: &mut Ui) -> egui::Response {
 		let id = ui.make_persistent_id(self.id_source);
 		let mut button_state = ui
@@ -121,7 +121,8 @@ impl<'a> Widget for DatePickerButton<'a> {
 		}
 
 		if button_state.picker_visible {
-			let width = 333.0;
+			let width = ui.style().text_styles[&egui::TextStyle::Button].size * 16.0;
+			//let width = 333.0;
 			let mut pos = button_response.rect.left_bottom();
 			let width_with_padding = width
 				+ ui.style().spacing.item_spacing.x
