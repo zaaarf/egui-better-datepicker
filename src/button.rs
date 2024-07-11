@@ -11,6 +11,7 @@ pub(crate) struct DatePickerButtonState {
 pub struct BetterDatePickerButton<'a> {
 	selection: &'a mut NaiveDate,
 	id_source: Option<&'a str>,
+	font: Option<egui::FontId>,
 	combo_boxes: bool,
 	arrows: bool,
 	calendar: bool,
@@ -25,6 +26,7 @@ impl<'a> BetterDatePickerButton<'a> {
 		Self {
 			selection,
 			id_source: None,
+			font: None,
 			combo_boxes: true,
 			arrows: true,
 			calendar: true,
@@ -40,6 +42,11 @@ impl<'a> BetterDatePickerButton<'a> {
 	#[inline]
 	pub fn id_source(mut self, id_source: &'a str) -> Self {
 		self.id_source = Some(id_source);
+		self
+	}
+
+	pub fn font(mut self, font: egui::FontId) -> Self {
+		self.font = Some(font);
 		self
 	}
 
@@ -101,10 +108,14 @@ impl<'a> Widget for BetterDatePickerButton<'a> {
 			.data_mut(|data| data.get_persisted::<DatePickerButtonState>(id))
 			.unwrap_or_default();
 
+		let font = self.font.unwrap_or(ui.style().text_styles[&egui::TextStyle::Button].clone());
+
 		let mut text = if self.show_icon {
 			RichText::new(format!("{} 📆", self.selection.format(&self.format)))
+				.font(font.clone())
 		} else {
 			RichText::new(format!("{}", self.selection.format(&self.format)))
+				.font(font.clone())
 		};
 		let visuals = ui.visuals().widgets.open;
 		if button_state.picker_visible {
@@ -121,8 +132,7 @@ impl<'a> Widget for BetterDatePickerButton<'a> {
 		}
 
 		if button_state.picker_visible {
-			let width = ui.style().text_styles[&egui::TextStyle::Button].size * 16.0;
-			//let width = 333.0;
+			let width = font.size * 24.0;
 			let mut pos = button_response.rect.left_bottom();
 			let width_with_padding = width
 				+ ui.style().spacing.item_spacing.x
@@ -160,7 +170,7 @@ impl<'a> Widget for BetterDatePickerButton<'a> {
 								calendar_week: self.calendar_week,
 								highlight_weekends: self.highlight_weekends,
 							}
-							.draw(ui)
+							.draw(ui, font)
 						})
 						.inner
 				});

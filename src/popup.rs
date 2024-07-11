@@ -38,7 +38,7 @@ pub(crate) struct DatePickerPopup<'a> {
 
 impl<'a> DatePickerPopup<'a> {
 	/// Returns `true` if user pressed `Save` button.
-	pub fn draw(&mut self, ui: &mut Ui) -> bool {
+	pub fn draw(&mut self, ui: &mut Ui, font: egui::FontId) -> bool {
 		let id = ui.make_persistent_id("date_picker");
 		let today = chrono::offset::Utc::now().date_naive();
 		let mut popup_state = ui
@@ -54,7 +54,7 @@ impl<'a> DatePickerPopup<'a> {
 
 		let weeks = month_data(popup_state.year, popup_state.month);
 		let (mut close, mut saved) = (false, false);
-		let height = ui.style().text_styles[&egui::TextStyle::Button].size;
+		let height = font.size;
 		let spacing = (height + ui.spacing().button_padding.y * 2.0) / 10.0;
 		ui.spacing_mut().item_spacing = Vec2::splat(spacing);
 		StripBuilder::new(ui)
@@ -78,7 +78,7 @@ impl<'a> DatePickerPopup<'a> {
 						builder.sizes(Size::remainder(), 3).horizontal(|mut strip| {
 							strip.cell(|ui| {
 								ComboBox::from_id_source("date_picker_year")
-									.selected_text(popup_state.year.to_string())
+									.selected_text(RichText::new(popup_state.year.to_string()).font(font.clone()))
 									.show_ui(ui, |ui| {
 										for year in today.year() - 100..today.year() + 10 {
 											if ui
@@ -102,7 +102,7 @@ impl<'a> DatePickerPopup<'a> {
 							});
 							strip.cell(|ui| {
 								ComboBox::from_id_source("date_picker_month")
-									.selected_text(month_name(popup_state.month))
+									.selected_text(RichText::new(month_name(popup_state.month)).font(font.clone()))
 									.show_ui(ui, |ui| {
 										for month in 1..=12 {
 											if ui
@@ -126,7 +126,7 @@ impl<'a> DatePickerPopup<'a> {
 							});
 							strip.cell(|ui| {
 								ComboBox::from_id_source("date_picker_day")
-									.selected_text(popup_state.day.to_string())
+									.selected_text(RichText::new(popup_state.day.to_string()).font(font.clone()))
 									.show_ui(ui, |ui| {
 										for day in 1..=popup_state.last_day_of_month() {
 											if ui
@@ -334,7 +334,8 @@ impl<'a> DatePickerPopup<'a> {
 																RichText::new(
 																	day.day().to_string(),
 																)
-																.color(text_color),
+																.color(text_color)
+																.font(font.clone()),
 															)
 															.fill(fill_color),
 														);
