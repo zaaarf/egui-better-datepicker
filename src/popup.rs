@@ -155,7 +155,7 @@ impl<'a> DatePickerPopup<'a> {
 							strip.cell(|ui| {
 								ui.with_layout(Layout::top_down_justified(Align::Center), |ui| {
 									if ui
-										.button("<<<")
+										.button(RichText::new("<<<").font(font.clone()))
 										.on_hover_text("subtract one year")
 										.clicked()
 									{
@@ -171,7 +171,7 @@ impl<'a> DatePickerPopup<'a> {
 							strip.cell(|ui| {
 								ui.with_layout(Layout::top_down_justified(Align::Center), |ui| {
 									if ui
-										.button("<<")
+										.button(RichText::new("<<").font(font.clone()))
 										.on_hover_text("subtract one month")
 										.clicked()
 									{
@@ -190,7 +190,7 @@ impl<'a> DatePickerPopup<'a> {
 							});
 							strip.cell(|ui| {
 								ui.with_layout(Layout::top_down_justified(Align::Center), |ui| {
-									if ui.button("<").on_hover_text("subtract one day").clicked() {
+									if ui.button(RichText::new("<").font(font.clone())).on_hover_text("subtract one day").clicked() {
 										popup_state.day -= 1;
 										if popup_state.day == 0 {
 											popup_state.month -= 1;
@@ -208,7 +208,7 @@ impl<'a> DatePickerPopup<'a> {
 							});
 							strip.cell(|ui| {
 								ui.with_layout(Layout::top_down_justified(Align::Center), |ui| {
-									if ui.button(">").on_hover_text("add one day").clicked() {
+									if ui.button(RichText::new(">").font(font.clone())).on_hover_text("add one day").clicked() {
 										popup_state.day += 1;
 										if popup_state.day > popup_state.last_day_of_month() {
 											popup_state.day = 1;
@@ -226,7 +226,7 @@ impl<'a> DatePickerPopup<'a> {
 							});
 							strip.cell(|ui| {
 								ui.with_layout(Layout::top_down_justified(Align::Center), |ui| {
-									if ui.button(">>").on_hover_text("add one month").clicked() {
+									if ui.button(RichText::new(">>").font(font.clone())).on_hover_text("add one month").clicked() {
 										popup_state.month += 1;
 										if popup_state.month > 12 {
 											popup_state.month = 1;
@@ -242,7 +242,7 @@ impl<'a> DatePickerPopup<'a> {
 							});
 							strip.cell(|ui| {
 								ui.with_layout(Layout::top_down_justified(Align::Center), |ui| {
-									if ui.button(">>>").on_hover_text("add one year").clicked() {
+									if ui.button(RichText::new(">>>").font(font.clone())).on_hover_text("add one year").clicked() {
 										popup_state.year += 1;
 										popup_state.day =
 											popup_state.day.min(popup_state.last_day_of_month());
@@ -268,7 +268,7 @@ impl<'a> DatePickerPopup<'a> {
 										ui.with_layout(
 											Layout::centered_and_justified(Direction::TopDown),
 											|ui| {
-												ui.label("Week");
+												ui.label(RichText::new("Week").font(font.clone()));
 											},
 										);
 									});
@@ -280,7 +280,7 @@ impl<'a> DatePickerPopup<'a> {
 										ui.with_layout(
 											Layout::centered_and_justified(Direction::TopDown),
 											|ui| {
-												ui.label(name);
+												ui.label(RichText::new(name).font(font.clone()));
 											},
 										);
 									});
@@ -380,14 +380,14 @@ impl<'a> DatePickerPopup<'a> {
 						strip.empty();
 						strip.cell(|ui| {
 							ui.with_layout(Layout::top_down_justified(Align::Center), |ui| {
-								if ui.button("Cancel").clicked() {
+								if ui.button(RichText::new("Cancel").font(font.clone())).clicked() {
 									close = true;
 								}
 							});
 						});
 						strip.cell(|ui| {
 							ui.with_layout(Layout::top_down_justified(Align::Center), |ui| {
-								if ui.button("Save").clicked() {
+								if ui.button(RichText::new("Save").font(font.clone())).clicked() {
 									*self.selection = NaiveDate::from_ymd_opt(
 										popup_state.year,
 										popup_state.month,
